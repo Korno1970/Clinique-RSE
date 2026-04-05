@@ -1778,7 +1778,7 @@ function checkT2() {
     btn.style.display = (ok1 && ok2) ? 'flex' : 'none';
 }
 
-// Clé API supprimée — appels via proxy Vercel
+// Proxy Vercel — clé gérée côté serveur
 
 function sendFeedbackP1() {
     var signals = document.getElementById('t2signals').value;
@@ -1795,20 +1795,32 @@ function sendFeedbackP1() {
     fbBox.style.display = 'block';
     fbBox.innerHTML = '<p class="feedback-loading">⏳ Analyse en cours — quelques secondes…</p>';
 
-    var prompt = "Tu es un formateur expert en RSE et communication responsable. Tu vouvoies l'étudiant(e) — utilise 'vous'. Réponds en texte brut uniquement : pas de JSON, pas de markdown, pas de ** ni de listes à puces. 3 paragraphes séparés par une ligne vide. Ton bienveillant et encourageant : commence par valoriser ce qui est bien, formule les manques comme des pistes d'amélioration, et termine sur une note positive ou une question qui ouvre la réflexion.\n\n" +
-        "CONTEXTE — Deux cas ont été présentés à l'étudiant(e) :\n" +
-        "1. Intermarché : campagne pub valorisant les producteurs français, mais marge de 148% sur la tomate française vs 10 cts d'écart à l'achat avec la tomate marocaine.\n" +
-        "2. Innocent : marque positionnée naturel / artisanal / engagé, rachetée par Coca-Cola en 2009, plainte JDP fondée en 2023 sur son usine neutre en carbone, plainte FNE contre Coca-Cola en 2024.\n\n" +
+    var prompt = "Tu es un évaluateur pédagogique rigoureux pour un module académique de niveau Bachelor/Master sur la RSE et le greenwashing. Tu vouvoies l'étudiant(e). Réponds en texte brut uniquement : pas de JSON, pas de markdown, pas de ** ni de listes à puces.\n\n" +
+        "CONTEXTE DU MODULE :\n" +
+        "Deux cas ont été présentés et analysés :\n" +
+        "1. Intermarché : campagne 'Oui à la souveraineté alimentaire française'. Tomate française achetée 0,80€ au producteur, vendue 1,99€. Tomate marocaine achetée 0,70€, vendue 0,99€. Marge de 148% sur la tomate française vs 10 centimes d'écart à l'achat. L'expert Olivier Dauvers conclut que c'est 'volontaire'.\n" +
+        "2. Innocent : marque positionnée naturel/artisanal/engagé, rachetée par Coca-Cola en 2009. Plainte JDP fondée en 2023 sur son usine 'neutre en carbone'. Plainte FNE contre Coca-Cola en 2024. Slogans : 'la grande classe verte', 'mission climat'.\n\n" +
         "PRODUCTIONS DE L'ÉTUDIANT(E) :\n" +
-        "Confrontation Intermarché :\n\"" + t1q1 + "\"\n\n" +
-        "Alternative de communication honnête proposée :\n\"" + t1q2 + "\"\n\n" +
+        "Confrontation Intermarché (question 1) :\n\"" + t1q1 + "\"\n\n" +
+        "Alternative de communication honnête (question 2) :\n\"" + t1q2 + "\"\n\n" +
         "Signaux identifiés dans la communication Innocent :\n\"" + signals + "\"\n\n" +
         "Faits contradictoires identifiés :\n\"" + facts + "\"\n\n" +
-        "ÉVALUATION ATTENDUE :\n" +
-        "1. Sur la confrontation Intermarché : la prise de recul est-elle précise ? L'alternative proposée est-elle réaliste et honnête ?\n" +
-        "2. Sur le cas Innocent : les signaux identifiés sont-ils pertinents ? Les faits cités sont-ils bien choisis ?\n" +
-        "3. Une observation de synthèse : quel mécanisme commun ces deux cas illustrent-ils ?\n\n" +
-        "Tu vouvoies l'étudiant(e) dans ta réponse — utilise 'vous' et non 'l\'étudiant(e)'. Réponds en texte brut uniquement : pas de JSON, pas de markdown, pas de ** ni de listes à puces. 3 paragraphes séparés par une ligne vide. Ton bienveillant et encourageant : commence par valoriser ce qui est bien, formule les manques comme des pistes d'amélioration plutôt que des erreurs, et termine sur une note positive ou une question qui ouvre la réflexion. 3 paragraphes : (1) ce qui est juste dans votre réponse, (2) ce qui manque ou est incorrect, (3) une question ouverte.";
+        "════════════════════════════════════════\n" +
+        "ÉTAPE 1 — ÉVALUATION PRÉALABLE OBLIGATOIRE\n" +
+        "════════════════════════════════════════\n\n" +
+        "Avant toute analyse, évalue ces 4 critères :\n\n" +
+        "A. REMPLISSAGE : répétitions de mots, charabia, caractères aléatoires, contenu manifestement sans effort (ex: 'affects affects', 'aaa', copier-coller sans rapport) ?\n\n" +
+        "B. HORS-SUJET : la réponse ignore totalement les cas Intermarché et Innocent ? Ne cite aucun fait précis du module (chiffres, noms, mécanismes décrits) ?\n\n" +
+        "C. RÉPONSE IA PROBABLE : la réponse présente-t-elle simultanément ces signaux ? Prose générique applicable à n'importe quel cas de greenwashing / aucun chiffre précis cité (0,80€, 148%, 2009, JDP 2023...) / structure trop parfaite pour une réflexion spontanée / vocabulaire académique irréprochable sans aucune hésitation ni formulation personnelle / absence totale d'ancrage dans les documents spécifiques du module.\n\n" +
+        "D. INSUFFISANCE : réponse sincère mais superficielle — effleure sans analyser, affirme sans justifier, reste en deçà du niveau B3/M2 attendu.\n\n" +
+        "════════════════════════════════════════\n" +
+        "ÉTAPE 2 — RÉPONSE SELON LE DIAGNOSTIC\n" +
+        "════════════════════════════════════════\n\n" +
+        "Si A : réponds UNIQUEMENT : 'REMPLISSAGE DÉTECTÉ. Cette réponse ne constitue pas un travail sérieux. Le module ne peut pas être validé sur cette base. Recommencez depuis cette étape.'\n\n" +
+        "Si B : réponds UNIQUEMENT : 'HORS-SUJET. Vos réponses n'exploitent pas les éléments analysés dans ce module. Une réponse sérieuse cite des faits précis — chiffres, noms, mécanismes — issus des cas Intermarché et Innocent. Recommencez en vous appuyant sur les documents.'\n\n" +
+        "Si C : réponds UNIQUEMENT : 'RÉPONSE ATYPIQUE. Votre réponse présente les caractéristiques d'un texte généré ou fortement remanié par une IA : aucun ancrage dans les faits précis du module, prose trop générique, absence de voix personnelle. Ce module évalue votre capacité d'analyse, pas celle d'un outil. Reformulez avec vos propres mots, en citant des éléments précis des cas étudiés.'\n\n" +
+        "Si D : commence par 'ANALYSE PARTIELLE.' puis 2 paragraphes : ce qui est juste, ce qui manque précisément. Termine par une question qui force l'approfondissement.\n\n" +
+        "Si aucun critère négatif : 3 paragraphes séparés par une ligne vide. (1) Ce que l'analyse a de solide — avec précision. (2) Ce qui pourrait être approfondi ou nuancé. (3) Une question ouverte qui pousse plus loin.";
 
     fetch('/api/claude', {
         method: 'POST',
@@ -1903,12 +1915,27 @@ function checkQuizAnswer(taId, countId, btnId, min) {
     }
 }
 
-var quizPrompts = [
-    "L'étudiant(e) doit identifier parmi les 7 formes ADEME celle qui s'applique le mieux au cas Innocent / plainte JDP 2023 (usine neutre en carbone non prouvée = forme 3 : absence de preuve, ou forme 1 : allégation vague). Il/elle doit citer un fait précis de la Phase 1. Évalue la précision du choix et la qualité de la justification. 3 paragraphes courts. Commence par nommer la forme correcte si l'étudiant(e) l'a bien identifiée, ou corriger si non. Termine par une question ouverte.",
-    "L'étudiant(e) doit analyser 'la grande classe verte' et 'mission climat' au regard de la directive 2024/825. Ces allégations sont vagues et non étayées = non conformes. Il/elle doit proposer une reformulation acceptable (spécifique, vérifiable). Évalue la qualité de l'analyse juridique et la pertinence de la reformulation. 3 paragraphes courts. Termine par une question ouverte.",
-    "Intermarché/Les Mousquetaires dépasse largement les seuils CSRD (150 000 salariés). Réponse correcte = oui, soumise depuis 2025. Les informations exigibles incluent : relations fournisseurs, politique d'achat, traçabilité des origines, prix pratiqués vs prix d'achat, impact sur les agriculteurs. Évalue si l'étudiant(e) a correctement appliqué les seuils et identifié les bonnes catégories d'informations. 3 paragraphes. Termine par une question ouverte.",
-    "La double matérialité = matérialité d'impact (effets de l'entreprise sur le monde) + matérialité financière (effets du monde sur l'entreprise). Une bonne illustration avec Intermarché : impact sur les producteurs français (matérialité d'impact) + risque de réputation / réglementation sur les marges abusives (matérialité financière). Évalue la clarté de la définition et la pertinence de l'illustration. 3 paragraphes. Termine par une question ouverte.",
-    "Le mécanisme : reporting CSRD = cadre audité, technique, pour investisseurs ; communication RSE = acte commercial, encadré par droit conso + ARPP. Une entreprise peut avoir un rapport honnête ET une pub greenwashing si personne ne vérifie la cohérence. Les garde-fous : directive 2024/825, ARPP, JDP, DGCCRF, loi 2023 Industrie Verte, et de plus en plus les associations (FNE, UFC). Évalue la clarté de la distinction et l'exhaustivité des garde-fous cités. 3 paragraphes. Termine par une question ouverte."
+var quizData = [
+    {
+        question: "Parmi les 7 formes de greenwashing ADEME, laquelle s'applique le mieux au cas Innocent et à la plainte JDP d'octobre 2023 ? Justifiez en vous appuyant sur des faits précis de la Phase 1.",
+        correction: "Réponse attendue : forme 3 (absence de preuve) ou forme 1 (allégation vague) — les deux sont défendables si justifiées. Faits précis à mobiliser : usine 'neutre en carbone' non prouvée, plainte JDP fondée 2023, slogans 'la grande classe verte' et 'mission climat' sans indicateur. Une réponse sérieuse nomme la forme ADEME précisément et cite au moins un fait du module."
+    },
+    {
+        question: "La directive 2024/825 interdit les allégations vagues. Analysez 'la grande classe verte' et 'mission climat' présents sur la pub Innocent. Sont-ils conformes ? Reformulez l'un d'eux pour le rendre acceptable.",
+        correction: "Ces allégations sont non conformes : vagues, non étayées, sans indicateur vérifiable. Une bonne reformulation est spécifique (ex: 'nos emballages sont recyclés à 80% — certifié [organisme]'). Une réponse sérieuse applique la directive et produit une reformulation concrète, pas un vœu pieux."
+    },
+    {
+        question: "Intermarché est-elle soumise à la CSRD ? Quelles informations précises serait-elle tenue de publier sur sa politique d'achat agricole ?",
+        correction: "Oui, soumise depuis 2025 (Les Mousquetaires : +150 000 salariés, dépasse tous les seuils). Informations exigibles : politique d'achat, relations fournisseurs, traçabilité des origines, impact sur les agriculteurs, marges pratiquées vs prix d'achat. Une réponse sérieuse applique les seuils CSRD et identifie des catégories d'information précises, pas génériques."
+    },
+    {
+        question: "Expliquez la notion de double matérialité introduite par la CSRD. En quoi oblige-t-elle les entreprises à dépasser la simple communication sur leurs 'bonnes actions' ? Illustrez avec l'un des deux cas étudiés.",
+        correction: "Double matérialité = matérialité d'impact (effets de l'entreprise sur le monde) + matérialité financière (effets du monde sur l'entreprise). Illustration Intermarché : impact sur producteurs français (d'impact) + risque réglementaire et réputation sur les marges (financière). Illustration Innocent : impact carbone réel vs déclaré (d'impact) + risque de plainte et perte de confiance (financière). Une réponse sérieuse définit les deux dimensions et les illustre avec des éléments précis du module."
+    },
+    {
+        question: "Quelle différence entre un rapport CSRD honnête et une communication RSE greenwashée ? Une entreprise peut-elle faire les deux simultanément ? Quels garde-fous existent ?",
+        correction: "CSRD = reporting audité, technique, pour investisseurs et régulateurs. Communication RSE = acte commercial, encadré par droit conso + ARPP. Une entreprise peut avoir un rapport honnête ET une pub greenwashée si personne ne vérifie la cohérence. Garde-fous : directive 2024/825, ARPP, JDP, DGCCRF, loi 2023 Industrie Verte, associations (FNE, UFC). Une réponse sérieuse distingue clairement les deux régimes et cite au moins 2 garde-fous."
+    }
 ];
 
 function submitQuizAnswer(qNum) {
@@ -1922,13 +1949,26 @@ function submitQuizAnswer(qNum) {
     fbBox.style.display = 'block';
     fbBox.innerHTML = '<p class="feedback-loading">⏳ Analyse en cours…</p>';
 
-    var prompt = "Tu es un formateur expert en RSE. Tu vouvoies l'étudiant(e) — utilise 'vous'. " +
-        "Réponds en texte brut uniquement : pas de JSON, pas de markdown, pas de ** ni de listes à puces. " +
-        "3 paragraphes séparés par une ligne vide. " +
-        "Ton bienveillant et encourageant : commence par valoriser ce qui est bien, formule les manques comme des pistes d'amélioration, et termine sur une note positive ou une question qui ouvre la réflexion. " +
-        "Contexte de la question : " + quizPrompts[qNum - 1] + "\n\n" +
-        "Votre réponse :\n\"" + ans + "\"\n\n" +
-        "3 paragraphes : (1) ce qui est juste ou bien vu dans votre réponse, (2) ce qui gagnerait à être précisé ou approfondi, (3) une question ouverte pour prolonger votre réflexion.";
+    var q = quizData[qNum - 1];
+    var prompt = "Tu es un évaluateur pédagogique rigoureux pour un module académique de niveau Bachelor/Master sur la RSE et le greenwashing. Tu vouvoies l'étudiant(e). Réponds en texte brut uniquement : pas de JSON, pas de markdown, pas de ** ni de listes à puces.\n\n" +
+        "QUESTION POSÉE :\n" + q.question + "\n\n" +
+        "ÉLÉMENTS DE CORRECTION :\n" + q.correction + "\n\n" +
+        "RÉPONSE DE L'ÉTUDIANT(E) :\n\"" + ans + "\"\n\n" +
+        "════════════════════════════════\n" +
+        "ÉTAPE 1 — ÉVALUATION PRÉALABLE\n" +
+        "════════════════════════════════\n\n" +
+        "A. REMPLISSAGE : répétitions, charabia, caractères aléatoires, copier-coller sans rapport ?\n" +
+        "B. HORS-SUJET : aucun ancrage dans les cas Intermarché ou Innocent, aucun concept du module ?\n" +
+        "C. RÉPONSE IA PROBABLE : prose générique applicable à n'importe quel cas, aucun chiffre ou fait précis du module cité, structure trop parfaite, vocabulaire irréprochable sans aucune formulation personnelle ?\n" +
+        "D. INSUFFISANCE : réponse sincère mais trop courte, trop vague, ou en deçà du niveau B3/M2 ?\n\n" +
+        "════════════════════════════════\n" +
+        "ÉTAPE 2 — RÉPONSE SELON DIAGNOSTIC\n" +
+        "════════════════════════════════\n\n" +
+        "Si A : réponds UNIQUEMENT : 'REMPLISSAGE DÉTECTÉ. Cette réponse ne constitue pas un travail académique sérieux. Recommencez en répondant réellement à la question posée.'\n\n" +
+        "Si B : réponds UNIQUEMENT : 'HORS-SUJET. Votre réponse n'exploite pas les cas et concepts étudiés dans ce module. Appuyez-vous sur les éléments précis de la Phase 1 et des ressources.'\n\n" +
+        "Si C : réponds UNIQUEMENT : 'RÉPONSE ATYPIQUE. Votre réponse ne présente aucun ancrage dans les faits précis du module et aucune voix personnelle — caractéristiques d'un texte généré par IA. Ce module évalue votre raisonnement, pas celui d'un outil. Reformulez avec vos propres mots et citez des éléments précis des cas étudiés.'\n\n" +
+        "Si D : commence par 'ANALYSE PARTIELLE.' puis 2 paragraphes : ce qui est juste, ce qui manque précisément au regard de la correction. Termine par une question qui force l'approfondissement.\n\n" +
+        "Si aucun critère négatif : 3 paragraphes séparés par une ligne vide. (1) Ce que l'analyse a de solide, avec précision. (2) Ce qui pourrait être approfondi ou corrigé au regard de la correction. (3) Une question ouverte qui pousse plus loin.";
 
     fetch('/api/claude', {
         method: 'POST',
@@ -2016,13 +2056,31 @@ function sendEngagementFeedback(num) {
     fbBox.innerHTML = '<p class="feedback-loading">⏳ Analyse en cours…</p>';
 
     var p = engagementPrompts[num - 1];
-    var prompt = "Tu es un formateur expert en RSE. Tu vouvoies l'étudiant(e) — utilise 'vous'. Réponds en texte brut uniquement : pas de JSON, pas de markdown, pas de ** ni de listes à puces. 3 paragraphes séparés par une ligne vide. Ton bienveillant et encourageant : commence par valoriser ce qui est bien, formule les manques comme des pistes d'amélioration, et termine sur une note positive ou une question qui ouvre la réflexion.\n\n" +
+    var prompt = "Tu es un évaluateur pédagogique rigoureux pour un module académique de niveau Bachelor/Master sur la RSE. Tu vouvoies l'étudiant(e). Réponds en texte brut uniquement : pas de JSON, pas de markdown, pas de ** ni de listes à puces.\n\n" +
         "CONTEXTE ENTREPRISE : " + p.context + "\n\n" +
-        "DIMENSION : " + p.dim + "\n\n" +
-        "CRITÈRES D'ÉVALUATION : " + p.criteria + "\n\n" +
-        "ENGAGEMENT PROPOSÉ PAR L'ÉTUDIANT(E) :\n\"" + ans + "\"\n\n" +
-        "3 paragraphes : (1) les points forts de votre engagement au regard des critères ADEME, (2) les pistes pour le renforcer (spécificité, échéance, indicateur, vérifiabilité), (3) une suggestion concrète de reformulation ou une question pour aller plus loin." +
-        "Tu vouvoies l'étudiant(e) dans ta réponse — utilise 'vous' et non 'l\'étudiant(e)'. Réponds en texte brut uniquement : pas de JSON, pas de markdown, pas de ** ni de listes à puces. 3 paragraphes séparés par une ligne vide. Ton bienveillant et encourageant : commence par valoriser ce qui est bien, formule les manques comme des pistes d'amélioration plutôt que des erreurs, et termine sur une note positive ou une question qui ouvre la réflexion. 3 paragraphes : (1) critères ADEME que vous satisfaisez, (2) ce qui manque ou risque de poser problème, (3) une suggestion concrète d'amélioration.";
+        "DIMENSION ÉVALUÉE : " + p.dim + "\n\n" +
+        "CRITÈRES ADEME — S.P.V.D. :\n" +
+        "S — Spécifique : un objet précis, pas une intention générale\n" +
+        "P — Proportionné : réaliste pour une PME de 180 salariés\n" +
+        "V — Vérifiable : indicateur mesurable + source de vérification nommée\n" +
+        "D — Daté : une échéance explicite\n" +
+        "Directive 2024/825 : allégations génériques interdites dès septembre 2026.\n\n" +
+        "ENGAGEMENT PROPOSÉ :\n\"" + ans + "\"\n\n" +
+        "════════════════════════════════\n" +
+        "ÉTAPE 1 — ÉVALUATION PRÉALABLE\n" +
+        "════════════════════════════════\n\n" +
+        "A. REMPLISSAGE : répétitions, charabia, texte sans effort ?\n" +
+        "B. HORS-SUJET : l'engagement ne concerne pas Novapack, ignore le contexte donné, ne traite pas la dimension " + p.dim + " ?\n" +
+        "C. RÉPONSE IA PROBABLE : engagement générique applicable à toute entreprise, aucune adaptation au profil Novapack (taille, secteur, lacunes identifiées), formulation trop parfaite sans ancrage contextuel ?\n" +
+        "D. ENGAGEMENT NON CONFORME : sincère mais manque au moins 2 critères ADEME sur 4 (vague, sans indicateur, sans date, disproportionné) ?\n\n" +
+        "════════════════════════════════\n" +
+        "ÉTAPE 2 — RÉPONSE SELON DIAGNOSTIC\n" +
+        "════════════════════════════════\n\n" +
+        "Si A : réponds UNIQUEMENT : 'REMPLISSAGE DÉTECTÉ. Un engagement RSE professionnel ne peut pas reposer sur ce type de réponse. Recommencez sérieusement.'\n\n" +
+        "Si B : réponds UNIQUEMENT : 'HORS-SUJET. Votre engagement n'est pas ancré dans le profil de Novapack ni dans la dimension " + p.dim + " demandée. Reprenez le contexte de l'entreprise et reformulez.'\n\n" +
+        "Si C : réponds UNIQUEMENT : 'RÉPONSE ATYPIQUE. Votre engagement est trop générique et ne présente aucune adaptation au profil spécifique de Novapack. Ce module évalue votre capacité à formuler un engagement professionnel contextualisé. Reformulez en intégrant les éléments précis du dossier entreprise.'\n\n" +
+        "Si D : commence par 'ENGAGEMENT INSUFFISANT.' Analyse chaque critère S.P.V.D. — ce qui tient et ce qui manque. Propose une piste de reformulation concrète sur le critère le plus faible.\n\n" +
+        "Si aucun critère négatif : 3 paragraphes séparés par une ligne vide. (1) Les critères ADEME satisfaits — nommez-les explicitement. (2) Ce qui pourrait être renforcé ou mis en conformité directive 2024/825. (3) Validation ou suggestion concrète d'amélioration.";
 
     fetch('/api/claude', {
         method: 'POST',
@@ -2103,11 +2161,26 @@ function sendP4DiagFeedback() {
     fbBox.style.display = 'block';
     fbBox.innerHTML = '<p class="feedback-loading">⏳ Analyse en cours…</p>';
 
-    var prompt = "Tu es un formateur expert en RSE. Tu vouvoies l'étudiant(e) — utilise 'vous'. Réponds en texte brut uniquement : pas de JSON, pas de markdown, pas de ** ni de listes à puces. 3 paragraphes séparés par une ligne vide. Ton bienveillant et encourageant : commence par valoriser ce qui est bien, formule les manques comme des pistes d'amélioration, et termine sur une note positive ou une question qui ouvre la réflexion. Tu évalues le diagnostic RSE sur l'entreprise (" + company + ", secteur " + sector + ", taille : " + size + ").\n\n" +
-        "LACUNE IDENTIFIÉE PAR L'ÉTUDIANT(E) :\n\"" + diagA + "\"\n\n" +
+    var prompt = "Tu es un évaluateur pédagogique rigoureux pour un module académique de niveau Bachelor/Master sur la RSE. Tu vouvoies l'étudiant(e). Réponds en texte brut uniquement : pas de JSON, pas de markdown, pas de ** ni de listes à puces.\n\n" +
+        "ENTREPRISE ANALYSÉE : " + company + " — secteur : " + sector + " — taille : " + size + "\n\n" +
+        "LACUNE RSE IDENTIFIÉE :\n\"" + diagA + "\"\n\n" +
         "APPLICATION DES SEUILS CSRD :\n\"" + diagB + "\"\n\n" +
-        "3 paragraphes : (1) ce qui est pertinent dans votre diagnostic, (2) ce qui gagnerait à être précisé ou corrigé, (3) une question pour affiner votre analyse." +
-        "Tu vouvoies l'étudiant(e) dans ta réponse — utilise 'vous' et non 'l\'étudiant(e)'. Réponds en texte brut uniquement : pas de JSON, pas de markdown, pas de ** ni de listes à puces. 3 paragraphes séparés par une ligne vide. Ton bienveillant et encourageant : commence par valoriser ce qui est bien, formule les manques comme des pistes d'amélioration plutôt que des erreurs, et termine sur une note positive ou une question qui ouvre la réflexion. 3 paragraphes : (1) ce qui est pertinent dans votre diagnostic, (2) ce qui manque ou est inexact, (3) une question pour affiner.";
+        "RAPPEL SEUILS CSRD : obligatoire si 2 des 3 critères suivants sont dépassés — +250 salariés, +40M€ CA, +20M€ bilan. Applicable exercice 2025 pour les grandes entreprises, 2026 pour les PME cotées.\n\n" +
+        "════════════════════════════════\n" +
+        "ÉTAPE 1 — ÉVALUATION PRÉALABLE\n" +
+        "════════════════════════════════\n\n" +
+        "A. REMPLISSAGE : texte sans effort, répétitions, contenu non sérieux ?\n" +
+        "B. HORS-SUJET : l'étudiant(e) n'analyse pas vraiment son entreprise, répond de façon générique sans lien avec " + company + " ?\n" +
+        "C. RÉPONSE IA PROBABLE : diagnostic générique applicable à toute entreprise, aucun fait spécifique à " + company + " cité, application mécanique des seuils sans raisonnement ?\n" +
+        "D. DIAGNOSTIC INSUFFISANT : sincère mais lacune mal identifiée, seuils CSRD mal appliqués ou non justifiés ?\n\n" +
+        "════════════════════════════════\n" +
+        "ÉTAPE 2 — RÉPONSE SELON DIAGNOSTIC\n" +
+        "════════════════════════════════\n\n" +
+        "Si A : réponds UNIQUEMENT : 'REMPLISSAGE DÉTECTÉ. Ce diagnostic ne peut pas être validé. Recommencez avec un travail sérieux sur votre entreprise.'\n\n" +
+        "Si B : réponds UNIQUEMENT : 'HORS-SUJET. Votre diagnostic n'est pas ancré dans la réalité de " + company + ". Une lacune RSE doit être identifiée à partir de ce que vous connaissez réellement de l'entreprise.'\n\n" +
+        "Si C : réponds UNIQUEMENT : 'RÉPONSE ATYPIQUE. Votre diagnostic présente les caractéristiques d'une réponse générée : aucun élément spécifique à " + company + ", application mécanique sans raisonnement personnel. Reformulez à partir de ce que vous observez concrètement dans cette entreprise.'\n\n" +
+        "Si D : commence par 'DIAGNOSTIC PARTIEL.' Puis : ce qui est juste dans l'identification de la lacune, ce qui est inexact dans l'application des seuils CSRD avec la correction, une question pour affiner.\n\n" +
+        "Si aucun critère négatif : 3 paragraphes séparés par une ligne vide. (1) Ce qui est pertinent et bien observé dans ce diagnostic. (2) Ce qui pourrait être précisé ou corrigé. (3) Une question pour approfondir l'analyse.";
 
     fetch('/api/claude', {
         method: 'POST',
@@ -2180,11 +2253,30 @@ function sendP4EngFeedback() {
     fbBox.style.display = 'block';
     fbBox.innerHTML = '<p class="feedback-loading">⏳ Analyse en cours…</p>';
 
-    var prompt = "Tu es un formateur expert en RSE. Tu vouvoies l'étudiant(e) — utilise 'vous'. Réponds en texte brut uniquement : pas de JSON, pas de markdown, pas de ** ni de listes à puces. 3 paragraphes séparés par une ligne vide. Ton bienveillant et encourageant : commence par valoriser ce qui est bien, formule les manques comme des pistes d'amélioration, et termine sur une note positive ou une question qui ouvre la réflexion. Tu évalues un engagement RSE final pour l'entreprise (" + company + ", secteur " + sector + ", taille : " + size + ").\n\n" +
-        "ENGAGEMENT PROPOSÉ :\n\"" + eng + "\"\n\n" +
-        "CRITÈRES D'ÉVALUATION : Spécifique (objet précis), Proportionné (adapté à la taille), Vérifiable (indicateur + source), Daté (échéance). Directive 2024/825 : pas d'allégation vague ni de label autoproclamé.\n\n" +
-        "3 paragraphes : (1) les critères ADEME que vous satisfaisez dans cet engagement, (2) les pistes pour le renforcer ou le mettre en conformité avec la directive 2024/825, (3) une suggestion concrète ou une validation si l'engagement est solide." +
-        "Tu vouvoies l'étudiant(e) dans ta réponse — utilise 'vous' et non 'l\'étudiant(e)'. Réponds en texte brut uniquement : pas de JSON, pas de markdown, pas de ** ni de listes à puces. 3 paragraphes séparés par une ligne vide. Ton bienveillant et encourageant : commence par valoriser ce qui est bien, formule les manques comme des pistes d'amélioration plutôt que des erreurs, et termine sur une note positive ou une question qui ouvre la réflexion. 3 paragraphes : (1) critères ADEME que vous satisfaisez, (2) ce qui manque ou risque de non-conformité directive 2024/825, (3) suggestion concrète ou validation.";
+    var prompt = "Tu es un évaluateur pédagogique rigoureux pour un module académique de niveau Bachelor/Master sur la RSE. Tu vouvoies l'étudiant(e). Réponds en texte brut uniquement : pas de JSON, pas de markdown, pas de ** ni de listes à puces.\n\n" +
+        "ENTREPRISE : " + company + " — secteur : " + sector + " — taille : " + size + "\n\n" +
+        "ENGAGEMENT RSE FINAL PROPOSÉ :\n\"" + eng + "\"\n\n" +
+        "CRITÈRES D'ÉVALUATION — ADEME S.P.V.D. :\n" +
+        "S — Spécifique : un objet précis, pas une intention générale\n" +
+        "P — Proportionné : réaliste pour la taille déclarée\n" +
+        "V — Vérifiable : indicateur mesurable + source de vérification nommée\n" +
+        "D — Daté : une échéance explicite\n" +
+        "Directive 2024/825 : pas d'allégation vague non étayée, pas de label autoproclamé.\n\n" +
+        "════════════════════════════════\n" +
+        "ÉTAPE 1 — ÉVALUATION PRÉALABLE\n" +
+        "════════════════════════════════\n\n" +
+        "A. REMPLISSAGE : texte sans effort, répétitions ?\n" +
+        "B. HORS-SUJET : engagement sans lien avec " + company + " ni avec la RSE ?\n" +
+        "C. RÉPONSE IA PROBABLE : engagement générique applicable à toute entreprise, aucune adaptation à " + company + ", formulation trop parfaite sans ancrage concret ?\n" +
+        "D. ENGAGEMENT NON CONFORME : sincère mais vague, sans indicateur, sans date, ou disproportionné — manque au moins 2 critères S.P.V.D. ?\n\n" +
+        "════════════════════════════════\n" +
+        "ÉTAPE 2 — RÉPONSE SELON DIAGNOSTIC\n" +
+        "════════════════════════════════\n\n" +
+        "Si A : réponds UNIQUEMENT : 'REMPLISSAGE DÉTECTÉ. Cet engagement ne constitue pas une production sérieuse. Recommencez.'\n\n" +
+        "Si B : réponds UNIQUEMENT : 'HORS-SUJET. Votre engagement n'est pas ancré dans la réalité de " + company + ". Reformulez à partir de ce que vous connaissez de cette entreprise.'\n\n" +
+        "Si C : réponds UNIQUEMENT : 'RÉPONSE ATYPIQUE. Cet engagement est trop générique pour être attribué à " + company + " en particulier. Il présente les caractéristiques d'un texte généré. Reformulez avec un ancrage concret dans votre entreprise.'\n\n" +
+        "Si D : commence par 'ENGAGEMENT INSUFFISANT.' Évalue chaque critère S.P.V.D. explicitement — ce qui est satisfait, ce qui manque. Propose une reformulation concrète sur le critère le plus faible.\n\n" +
+        "Si aucun critère négatif : 3 paragraphes séparés par une ligne vide. (1) Les critères S.P.V.D. satisfaits — nommez-les. (2) Points de vigilance au regard de la directive 2024/825. (3) Validation ou suggestion d'amélioration ciblée.";
 
     fetch('/api/claude', {
         method: 'POST',
@@ -2250,16 +2342,17 @@ function sendP4RetroFeedback() {
     var fbBox = document.getElementById('p4-retro-feedback');
     fbBox.style.display = 'block';
     fbBox.innerHTML = '<p class="feedback-loading">⏳ Lecture en cours…</p>';
-    var prompt = "Tu es un formateur expert en RSE. " +
-        "Tu vouvoies l'étudiant(e) — utilise 'vous'. " +
-        "Réponds en texte brut : pas de JSON, pas de markdown, pas de **. " +
-        "Ton bienveillant et encourageant. " +
-        "L'étudiant(e) vient de terminer une séance de 3h30 sur la RSE et le greenwashing. " +
-        "Son entreprise : " + company + ". " +
-        "Voici sa réflexion finale sur ce qu'il/elle va faire différemment :\n\"" + retro + "\"\n\n" +
-        "3 paragraphes : (1) valorisez ce que cette réflexion révèle de sa prise de conscience, " +
-        "(2) proposez une piste concrète pour aller plus loin, " +
-        "(3) terminez par une phrase d'encouragement sincère, sans condescendance.";
+    var prompt = "Tu es un formateur expert en RSE qui clôt une séance de 3h30 avec un(e) alternant(e) de niveau Bachelor/Master. Tu vouvoies l'étudiant(e). Réponds en texte brut uniquement : pas de JSON, pas de markdown, pas de **.\n\n" +
+        "ENTREPRISE DE L'ALTERNANT(E) : " + company + "\n\n" +
+        "RÉFLEXION FINALE — ce qu'il/elle va faire différemment :\n\"" + retro + "\"\n\n" +
+        "════════════════════════════════\n" +
+        "ÉTAPE 1 — ÉVALUATION PRÉALABLE\n" +
+        "════════════════════════════════\n\n" +
+        "A. REMPLISSAGE ou absence totale de réflexion personnelle : texte sans contenu, répétitions, réponse en 2 mots ?\n" +
+        "B. RÉPONSE IA PROBABLE : réflexion trop lisse, générique, sans ancrage dans " + company + " ni dans le vécu de la journée ?\n\n" +
+        "Si A : réponds UNIQUEMENT : 'Cette réflexion finale ne reflète pas un travail sérieux. Prenez 5 minutes pour noter une chose concrète que vous allez faire différemment dans votre entreprise après cette journée.'\n\n" +
+        "Si B : réponds UNIQUEMENT : 'RÉPONSE ATYPIQUE. Cette réflexion ne présente pas de voix personnelle ni d'ancrage dans votre expérience chez " + company + ". Reformulez à partir de ce que vous avez vécu aujourd'hui et de ce que vous observez concrètement dans votre entreprise.'\n\n" +
+        "Si réflexion sincère — même courte, même imparfaite : 3 paragraphes séparés par une ligne vide. (1) Ce que cette réflexion révèle de précis sur votre prise de conscience — valorisez sans exagérer. (2) Une piste concrète et réaliste pour aller plus loin dans " + company + ". (3) Une phrase d'encouragement sobre et sincère — sans condescendance ni emphase.";
     fetch('/api/claude', {
         method: 'POST',
         headers: {
